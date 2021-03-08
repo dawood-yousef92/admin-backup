@@ -10,9 +10,10 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTabsModule } from '@angular/material/tabs';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { OfflineTableComponent } from './offline-table/offline-table.component';
 
 @NgModule({
-  declarations: [DynamicTableComponent],
+  declarations: [DynamicTableComponent, OfflineTableComponent],
   imports: [
       CommonModule,
       MatTableModule,
@@ -26,6 +27,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
       FormsModule,
       ReactiveFormsModule,
     ],
-  exports: [DynamicTableComponent],
+  exports: [DynamicTableComponent, OfflineTableComponent],
 })
 export class GeneralModule {}

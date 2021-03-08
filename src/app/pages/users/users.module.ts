@@ -13,7 +13,6 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTabsModule } from '@angular/material/tabs';
 import { GeneralModule } from 'src/app/_metronic/partials/layout/general/general.module';
-import { AuthGuard } from 'src/app/modules/auth/_services/auth.guard';
 import { RoleGuardService as RoleGuard } from 'src/app/modules/auth/_services/role-guard.service';
 
 
@@ -25,6 +24,7 @@ import { RoleGuardService as RoleGuard } from 'src/app/modules/auth/_services/ro
     TranslationModule,
     FormsModule,
     ReactiveFormsModule,
+    MatInputModule,
     RouterModule.forChild([
       {
         path: '',

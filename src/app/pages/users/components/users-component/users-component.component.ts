@@ -20,7 +20,7 @@ export class UsersListComponent implements OnInit {
     searchText: "",
     sortBy: "",
     pageNumber: 0,
-    rowsPerPage: 10,
+    rowsPerPage: 5000000,
     selectedPageSize: 0
   }
 
@@ -82,7 +82,7 @@ export class UsersListComponent implements OnInit {
   }
 
   checkPermissions() {
-    console.log(this.permissions);
+    // console.log(this.permissions);
     if(this.permissions.includes('Users.GetUserPermissions')) {
       this.customActions.push({name: 'permissions', icon:'flaticon2-lock text-success'})
     }

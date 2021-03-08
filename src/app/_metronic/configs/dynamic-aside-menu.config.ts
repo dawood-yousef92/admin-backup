@@ -19,25 +19,25 @@ export const DynamicAsideMenuConfig = {
       page: "/users",
       permission: "Users.",
     },
-    {
-      title: "Customers",
-      root: true,
-      translate: "MENU.CUSTOMERS",
-      svg: "./assets/media/svg/icons/General/User.svg",
-      bullet: "dot",
-      submenu: [
-        {
-          title: "List of Customers",
-          translate: "MENU.CUSTOMERS_LIST",
-          page: "/customers/customers-list",
-        },
-        {
-          title: "Classifications",
-          translate: "MENU.CLASSIFICATIONS",
-          page: "/customers/classifications",
-        },
-      ],
-    },
+    // {
+    //   title: "Customers",
+    //   root: true,
+    //   translate: "MENU.CUSTOMERS",
+    //   svg: "./assets/media/svg/icons/General/User.svg",
+    //   bullet: "dot",
+    //   submenu: [
+    //     {
+    //       title: "List of Customers",
+    //       translate: "MENU.CUSTOMERS_LIST",
+    //       page: "/customers/customers-list",
+    //     },
+    //     {
+    //       title: "Classifications",
+    //       translate: "MENU.CLASSIFICATIONS",
+    //       page: "/customers/classifications",
+    //     },
+    //   ],
+    // },
     {
       title: "Groups",
       root: true,
