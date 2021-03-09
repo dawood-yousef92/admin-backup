@@ -25,6 +25,9 @@ export const locale = {
       CUSTOMERS: 'Customers',
       CUSTOMERS_LIST: 'Customers List',
       CLASSIFICATIONS: 'Classifications',
+      ITEMS: 'Items',
+      ITEMS_LIST: 'Items List',
+      ADD_ITEM: 'Add Item',
 
     },
     AUTH: {

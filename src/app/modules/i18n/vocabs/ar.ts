@@ -25,6 +25,9 @@ export const locale = {
         CUSTOMERS: 'العملاء',
         CUSTOMERS_LIST: 'قائمة العملاء',
         CLASSIFICATIONS: 'التصنيفات',
+        ITEMS: 'بطاقة الصنف',
+        ITEMS_LIST: 'قائمة بطاقات الأصناف',
+        ADD_ITEM: 'اضافة بطاقة صنف',
       },
       AUTH: {
         GENERAL: {

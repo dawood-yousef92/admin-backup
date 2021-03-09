@@ -208,3 +208,7 @@ mat-table.mat-table {
 .form-control:disabled, .form-control[readonly] {
   cursor: not-allowed;
 }
+.img-table-col {
+  max-width: 60px;
+  height: 40px;
+}

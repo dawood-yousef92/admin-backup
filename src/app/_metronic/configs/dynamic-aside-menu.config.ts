@@ -48,6 +48,15 @@ export const DynamicAsideMenuConfig = {
       permission: "Roles.",
     },
     {
+      title: "Items",
+      root: true,
+      svg: "./assets/media/svg/icons/Shopping/Bag1.svg",
+      bullet: "dot",
+      translate: "MENU.ITEMS",
+      page: "/items",
+      permission: "noPermission",
+    },
+    {
       title: "Settings",
       root: true,
       svg: "./assets/media/svg/icons/General/Settings-2.svg",
