@@ -212,3 +212,46 @@ mat-table.mat-table {
   max-width: 60px;
   height: 40px;
 }
+.filter {
+  .mat-form-field-appearance-outline {
+    .mat-form-field-outline {
+      color: rgb(56 93 204 / 30%);
+    }
+    .mat-form-field-infix {
+      border: 0px;
+      padding: 5px;
+      margin-top: 8px;
+    }
+    .mat-form-field-wrapper {
+      padding-bottom: 0;
+    }
+  }
+}
+.delete-item {
+  background: transparent;
+  width: auto;
+  height: auto;
+  padding: 0;
+  border: 0;
+  position:absolute;
+  right: 10px;
+  top: 10px;
+  i::before {
+    font-size: 24px;
+    color: rgb(238, 39, 13);
+  }
+}
+.make-primary {
+  background: transparent;
+  width: auto;
+  height: auto;
+  padding: 0;
+  border: 0;
+  position:absolute;
+  left: 10px;
+  top: 10px;
+  i::before {
+    font-size: 24px;
+    color: rgb(245, 208, 0);
+  }
+}

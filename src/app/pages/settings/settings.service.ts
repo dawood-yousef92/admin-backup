@@ -12,28 +12,28 @@ export class SettingsService {
     constructor(private http: HttpClient){}
 
     getIdentitySettings(): Observable<any> {
-        return this.http.get<any>(this.baseUrl+'/AppSettings/GetIdentitySettings');
+        return this.http.get<any>('AppSettings/GetIdentitySettings');
     }
     
     updateIdentitySettings(settings):Observable<any> {
-        return this.http.put<any>(this.baseUrl+'/AppSettings/UpdateIdentitySettings', settings);
+        return this.http.put<any>('AppSettings/UpdateIdentitySettings', settings);
     }
     
     
     getFileStorageSettings(): Observable<any> {
-        return this.http.get<any>(this.baseUrl+'/AppSettings/GetFileStorageSettings');
+        return this.http.get<any>('AppSettings/GetFileStorageSettings');
     }
 
     updateFileStorageSettings(settings):Observable<any> {
-        return this.http.put<any>(this.baseUrl+'/AppSettings/UpdateFileStorageSettings', settings);
+        return this.http.put<any>('AppSettings/UpdateFileStorageSettings', settings);
     }
 
     getTokenSettings(): Observable<any> {
-        return this.http.get<any>(this.baseUrl+'/AppSettings/GetTokenSettings');
+        return this.http.get<any>('AppSettings/GetTokenSettings');
     }
 
     UpdateTokenSettings(settings):Observable<any> {
-        return this.http.put<any>(this.baseUrl+'/AppSettings/UpdateTokenSettings', settings);
+        return this.http.put<any>('AppSettings/UpdateTokenSettings', settings);
     }
     
 }

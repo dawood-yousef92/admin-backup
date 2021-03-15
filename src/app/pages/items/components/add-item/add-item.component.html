@@ -7,16 +7,96 @@
     <div class="card-body">
         <form class="form" [formGroup]="itemForm" novalidate="novalidate" (ngSubmit)="submit()">
             <div class="row mb-4">
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <div class="mb-4">
                         <mat-form-field class="w-100">
                             <input class="py-2" type="text" matInput placeholder="Name" formControlName="name"/>    
                         </mat-form-field>
                     </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-4">
+                        <mat-form-field class="w-100">
+                            <input class="py-2" type="text" matInput placeholder="Arabic Name" formControlName="nameAr"/>    
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="col-md-6">
                     <div class="mb-4">
                         <mat-form-field class="w-100">
                             <input class="py-2" type="text" matInput placeholder="Description" formControlName="description"/>    
                         </mat-form-field>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-4">
+                        <mat-form-field class="w-100">
+                            <input class="py-2" type="text" matInput placeholder="Arabic Description" formControlName="descriptionAr"/>    
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="mb-4">
+                                <mat-form-field class="w-100">
+                                    <input class="py-2" type="number" matInput placeholder="Price" formControlName="price"/>    
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-4">
+                                <mat-form-field class="w-100">
+                                    <input class="py-2" type="number" matInput placeholder="Offer Price" formControlName="offerPrice"/>    
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-4">
+                        <mat-form-field class="w-100">
+                            <mat-select class="py-2" formControlName="originalCountry" placeholder="Original Country">
+                                <div class="p-2 filter">
+                                    <mat-form-field appearance="outline" class="w-100">
+                                        <input matInput (keyup)="search($event.target.value,'countries')" (keydown)="$event.stopPropagation()" class="w-100">
+                                        <mat-icon matSuffix>search</mat-icon>
+                                    </mat-form-field>
+                                </div>
+                                <mat-option *ngFor="let country of countries" [value]="country.id" [ngClass]="{'d-none': !country?.name?.toLowerCase().includes(countriesFilter?.toLowerCase())}">
+                                    <div class="d-flex align-items-center">
+                                        <span class="symbol symbol-20 mr-3"><img [src]="country.flag"></span>{{country.name}}
+                                    </div>
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="col-12 mb-4">
+                    <div class="row">    
+                        <div class="col-12 mb-3">
+                            <input id="select-file" class="d-none" type="file" (change)="fileChangeEvent($event)" onclick="this.value = null"
+                                accept="image/png, image/jpeg, image/jpg" />
+                            <button [disabled]="itemImages.length > 3" (click)="selectFile()" type="button" class="btn btn-primary">Add Item Images<i class="flaticon-upload-1 text-white ml-2"></i></button>
+                        </div>
+                        <div class="col-md-3" *ngFor="let img of itemImages; let i = index">
+                            <div class="position-relative">
+                                <button type="button" class="make-primary" (click)="itemForm.get('primaryImage').setValue(i)">
+                                    <i *ngIf="i !== itemForm.controls.primaryImage.value" class="far fa-star"></i>
+                                    <i *ngIf="i === itemForm.controls.primaryImage.value" class="fas fa-star"></i>
+                                </button>
+                                <button type="button" class="delete-item" (click)="deleteImg(img)"><i class="flaticon-circle"></i></button>
+                                <img [src]="img.base64" class="w-100"/>
+                            </div>
+                        </div>
+                        <!-- <div>
+                            <button type="button" (click)="test()">test</button>
+                        </div> -->
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-4">
+                        <mat-checkbox formControlName="isActive">Is Active</mat-checkbox>
                     </div>
                 </div>
             </div>
@@ -28,3 +108,31 @@
         </form>
     </div>
 </div>
+
+<ng-template #cropModal let-c="close" let-d="dismiss">
+    <div class="modal-header">
+      <h4 class="modal-title">Crop Item Image</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">   
+        <image-cropper
+            [imageChangedEvent]="imageChangedEvent"
+            [maintainAspectRatio]="true"
+            [aspectRatio]="4 / 3"
+            format="png"
+            (imageCropped)="imageCropped($event)"
+            (imageLoaded)="imageLoaded($event)"
+            (cropperReady)="cropperReady()"
+            (loadImageFailed)="loadImageFailed()"
+        ></image-cropper>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="c('Close click')">Close</button>
+        <button type="button" class="btn btn-primary" (click)="addCroppedImage(croppedImage)">Crop Image</button>
+        <div class="fv-plugins-message-container ng-star-inserted w-100 text-center" *ngIf="errorImg">
+            <div class="fv-help-block">Image size larget than 2MB</div>
+        </div>
+    </div>
+</ng-template>

@@ -60,7 +60,7 @@ export class OfflineTableComponent implements OnInit {
     let a = [];
     this.gridData.map((item) => {
       Object.keys(item).map((val) => {
-        if(typeof item[val] === "string" && String(item[val]).includes(filterValue) && val !== 'id' && !a.includes(item)) {
+        if(typeof item[val] === "string" && String(item[val].toLowerCase()).includes(filterValue.toLowerCase()) && val !== 'id' && !a.includes(item)) {
           a.push(item);
         }
       })

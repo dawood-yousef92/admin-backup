@@ -12,34 +12,34 @@ export class UsersService {
     constructor(private http: HttpClient){}
 
     getUsers(dataSettings): Observable<any> {
-        return this.http.post<any>(this.baseUrl+'/Users/GetUsers', dataSettings);
+        return this.http.post<any>('Users/GetUsers', dataSettings);
     }
     
     deleteUser(userId:string): Observable<any> {
-        return this.http.delete<any>(this.baseUrl+`/Users/DeleteUser?id=${userId}`);
+        return this.http.delete<any>(`Users/DeleteUser?id=${userId}`);
     }
 
     createUser(userData):Observable<any> {
-        return this.http.post<any>(this.baseUrl+'/Users/CreateUser', userData);
+        return this.http.post<any>('Users/CreateUser', userData);
     }
     
     updateUser(userData):Observable<any> {
-        return this.http.post<any>(this.baseUrl+'/Users/UpdateUser', userData);
+        return this.http.post<any>('Users/UpdateUser', userData);
     }
 
     getRols(paging):Observable<any> {
-        return this.http.post<any>(this.baseUrl+'/Roles/GetRoles',paging);
+        return this.http.post<any>('Roles/GetRoles',paging);
     }
 
     getUserById(id):Observable<any> {
-        return this.http.post<any>(this.baseUrl+'/Users/GetUser',id);
+        return this.http.post<any>('Users/GetUser',id);
     }
 
     getUserPermissions(data):Observable<any> {
-        return this.http.post<any>(this.baseUrl+'/Users/GetUserPermissions', data);
+        return this.http.post<any>('Users/GetUserPermissions', data);
     }
 
     grantOrRevokePermissions(data):Observable<any> {
-        return this.http.post<any>(this.baseUrl+'/Users/GrantOrRevokePermissions', data);
+        return this.http.post<any>('Users/GrantOrRevokePermissions', data);
     }
 }

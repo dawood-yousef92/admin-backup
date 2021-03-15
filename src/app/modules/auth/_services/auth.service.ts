@@ -110,6 +110,6 @@ export class AuthService {
   }
 
   getUserByToken(): Observable<any> {
-    return this.httpClient.get<any>(`${environment.apiUrl}/Manage/GetUser`);
+    return this.httpClient.get<any>(`Manage/GetUser`);
   }
 }

@@ -12,23 +12,23 @@ export class ManageAccountServise {
     constructor(private http: HttpClient){}
 
     updateUserProfile(phoneNumber:any): Observable<any> {
-        return this.http.put<any>(this.baseUrl+'/Manage/UpdateUserProfile', phoneNumber);
+        return this.http.put<any>('Manage/UpdateUserProfile', phoneNumber);
     }
 
     changePassword(data:any): Observable<any> {
-        return this.http.post<any>(this.baseUrl+'/Manage/ChangePassword', data);
+        return this.http.post<any>('Manage/ChangePassword', data);
     }
 
     changeEmail(newEmail:any): Observable<any> {
-        return this.http.post<any>(this.baseUrl+'/Manage/ChangeEmail', newEmail);
+        return this.http.post<any>('Manage/ChangeEmail', newEmail);
     }
 
     downloadPersonalData(): any {
-        return this.http.get(this.baseUrl+'/Manage/DownloadPersonalData');
+        return this.http.get('Manage/DownloadPersonalData');
     }
 
     deleteUser(password): Observable<any> {
-        return this.http.post<any>(this.baseUrl+'/manage/DeletePersonalData', password);
+        return this.http.post<any>('manage/DeletePersonalData', password);
     }
     
 }

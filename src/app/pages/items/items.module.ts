@@ -14,6 +14,8 @@ import { RoleGuardService as RoleGuard } from 'src/app/modules/auth/_services/ro
 import { ItemsComponent } from './items.component';
 import { AddItemComponent } from './components/add-item/add-item.component';
 import { ItemsListComponent } from './components/items-list/items-list.component';
+import {MatIconModule} from '@angular/material/icon';
+import { ImageCropperModule } from 'ngx-image-cropper';
 
 
 @NgModule({
@@ -23,6 +25,7 @@ import { ItemsListComponent } from './components/items-list/items-list.component
     TranslationModule,
     FormsModule,
     ReactiveFormsModule,
+    ImageCropperModule,
     RouterModule.forChild([
       {
         path: '',
@@ -49,7 +52,8 @@ import { ItemsListComponent } from './components/items-list/items-list.component
     MatCheckboxModule,
     MatSelectModule,
     MatTabsModule,
-    GeneralModule
+    GeneralModule,
+    MatIconModule,
 
   ],
   exports: [RouterModule],
