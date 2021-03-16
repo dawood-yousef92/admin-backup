@@ -1,11 +1,12 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { GeneralService } from 'src/app/pages/general.service';
 import { LoaderService } from 'src/app/_metronic/core/services/loader.service';
 import { ImageCroppedEvent } from 'ngx-image-cropper';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ItemsService } from '../../items.service';
 
 @Component({
   selector: 'app-add-item',
@@ -13,6 +14,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./add-item.component.scss']
 })
 export class AddItemComponent implements OnInit {
+  @ViewChild("catModal") catModal: TemplateRef<any>;
   @ViewChild('cropModal', { static: false }) cropModal: ElementRef;
   countries:any = [];
   countriesFilter:string = '';
@@ -21,8 +23,13 @@ export class AddItemComponent implements OnInit {
   itemImages:any = [];
   errorImg:boolean = false;
 
+  categories:any;
+  selectedCat:any[] = [];
+  closeResult = '';
+
   itemForm: FormGroup;
   constructor(private generalService:GeneralService,
+              private itemsService:ItemsService,
               private fb: FormBuilder,private toaster: ToastrService,
               private router: Router,
               private loderService: LoaderService,
@@ -80,15 +87,8 @@ export class AddItemComponent implements OnInit {
   ngOnInit(): void {
     this.getCountries();
     this.initForm();
+    this.getCategoriesByBusinessType();
   }
-
-
-
-
-
-
-
-
 
   test() {
     console.log(this.itemImages);
@@ -149,6 +149,34 @@ export class AddItemComponent implements OnInit {
         u8arr[n] = bstr.charCodeAt(n);
     }
     return new File([u8arr], filename, {type:mime});
+  }
+
+  openModal(content) {
+    this.modalService.open(content, { centered: true } ).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
+
+  getCategoriesByBusinessType() {
+    this.selectedCat = [];
+    this.loderService.setIsLoading = true;
+    this.itemsService.getCategoriesByBusinessType(3).subscribe((data) => {
+      this.categories = data.result.productsCategoryItem.concat(data.result.servicesCategoryItem);
+      this.loderService.setIsLoading = false;
+    },(error) => {
+      this.loderService.setIsLoading = false;
+    });
   }
 
 }

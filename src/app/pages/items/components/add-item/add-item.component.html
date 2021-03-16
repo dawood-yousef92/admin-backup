@@ -72,6 +72,20 @@
                         </mat-form-field>
                     </div>
                 </div>
+                <div class="col-md-6 mb-4">
+                    <!-- <mat-form-field class="w-100 mb-3">
+                        <mat-select formControlName="businessType" placeholder="Main Major Type" (selectionChange)="getCategoriesByBusinessType()" required>
+                            <mat-option *ngFor="let companyBusinessType of companyBusinessTypes" [value]="companyBusinessType.key">{{companyBusinessType.value}}</mat-option>
+                        </mat-select>
+                    </mat-form-field> -->
+                    <button type="button" class="btn btn-primary" (click)="openModal(catModal)">Select Category</button>
+                    <div class="chips-list" *ngIf="selectedCat.length > 0">
+                        <span class="chip" *ngFor="let cat of selectedCat">
+                            {{cat.name}} 
+                            <!-- <mat-icon role="img" (click)="removeCat(cat)" class="cursor-pointer ml-2 mat-icon notranslate mat-chip-remove mat-chip-trailing-icon material-icons">cancel</mat-icon> -->
+                        </span>
+                    </div>
+                </div>
                 <div class="col-12 mb-4">
                     <div class="row">    
                         <div class="col-12 mb-3">
@@ -134,5 +148,59 @@
         <div class="fv-plugins-message-container ng-star-inserted w-100 text-center" *ngIf="errorImg">
             <div class="fv-help-block">Image size larget than 2MB</div>
         </div>
+    </div>
+</ng-template>
+
+
+<ng-template #subCat let-categories="categories">
+    <ng-container *ngIf="categories?.length > 0">
+        <ng-container *ngFor="let cat of categories">
+            <mat-expansion-panel *ngIf="cat.categories?.length > 0">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        <!-- <mat-checkbox [checked]="isChecked(cat)" (click)="clickCat($event)" (change)="selectCat($event,cat)" class="mx-2"></mat-checkbox>  -->
+                        {{cat?.name}}
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div [ngTemplateOutlet]="subCat" [ngTemplateOutletContext]="{categories:cat.categories}">
+                </div>
+            </mat-expansion-panel>
+            <mat-panel-title *ngIf="cat.categories?.length === 0" class="mat-expansion-panel-header-title noSub">
+                <!-- <mat-checkbox [checked]="isChecked(cat)" (click)="clickCat($event)" (change)="selectCat($event,cat,'sub')" class="mx-2"></mat-checkbox>  -->
+                {{cat?.name}}
+            </mat-panel-title>
+        </ng-container>
+    </ng-container>
+</ng-template>
+
+<ng-template #catModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title mb-0">Select Categories</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span class="d-block c-black" aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body categories-modal-body">
+        <mat-accordion class="custom-tree">
+            <ng-container *ngFor="let cat of categories">
+                <mat-expansion-panel *ngIf="cat.categories?.length > 0">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            <!-- <mat-checkbox [checked]="isChecked(cat)" (click)="clickCat($event)" (change)="selectCat($event,cat,'main')" class="mx-2"></mat-checkbox>  -->
+                            {{cat.name}}
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <div *ngIf="cat.categories?.length > 0" [ngTemplateOutlet]="subCat" [ngTemplateOutletContext]="{categories:cat.categories}">
+                    </div>
+                </mat-expansion-panel>
+                <mat-panel-title *ngIf="cat.categories?.length === 0" class="mat-expansion-panel-header-title noSub">
+                    <!-- <mat-checkbox [checked]="isChecked(cat)" (click)="clickCat($event)" (change)="selectCat($event,cat,'sub')" class="mx-2"></mat-checkbox>  -->
+                    {{cat?.name}}
+                </mat-panel-title>
+            </ng-container>
+        </mat-accordion>    
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="modal.dismiss('Cross click')">Done</button>
     </div>
 </ng-template>

@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpResponse} from '@angular/common/http';
-import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
 
 @Injectable({
     providedIn: 'root',
 })
 export class ItemsService {
-
-    baseUrl = environment.apiUrl;
     constructor(private http: HttpClient){}
 
+    getCategoriesByBusinessType(businessType): Observable<any> {
+        return this.http.post<any>('Companies/GetCategoriesByBusinessType', {businessType:businessType});
+    }
 }

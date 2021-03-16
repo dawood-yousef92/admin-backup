@@ -16,6 +16,7 @@ import { AddItemComponent } from './components/add-item/add-item.component';
 import { ItemsListComponent } from './components/items-list/items-list.component';
 import {MatIconModule} from '@angular/material/icon';
 import { ImageCropperModule } from 'ngx-image-cropper';
+import {MatExpansionModule} from '@angular/material/expansion';
 
 
 @NgModule({
@@ -54,6 +55,7 @@ import { ImageCropperModule } from 'ngx-image-cropper';
     MatTabsModule,
     GeneralModule,
     MatIconModule,
+    MatExpansionModule,
 
   ],
   exports: [RouterModule],

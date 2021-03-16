@@ -51,7 +51,7 @@ export class AuthService {
   // public methods
   login(email: string, password: string): Observable<any> {
     return this.httpClient.post(
-      `${environment.apiUrl}/Account/Login`,
+      `Account/Login`,
       {
         email,
         password,
@@ -61,7 +61,7 @@ export class AuthService {
 
   register(email: string, password: string, confirmPassword: string): Observable<any> {
     return this.httpClient.post(
-      `${environment.apiUrl}/Account/Register`,
+      `Account/Register`,
       {
         email,
         password,
@@ -72,7 +72,7 @@ export class AuthService {
 
   confirmEmail(userId:string,code:string): Observable<any> {
     return this.httpClient.post(
-      `${environment.apiUrl}/Account/ConfirmEmail`,
+      `Account/ConfirmEmail`,
       {
         userId,
         code,
@@ -82,7 +82,7 @@ export class AuthService {
 
   forgetPassword(email:string): Observable<any> {
     return this.httpClient.post(
-      `${environment.apiUrl}/Account/ForgotPassword`,
+      `Account/ForgotPassword`,
       {
         email,
       }
@@ -91,7 +91,7 @@ export class AuthService {
 
   resetPassword(email:string,password:string,confirmPassword:string,code:string): Observable<any>{
     return this.httpClient.post(
-      `${environment.apiUrl}/Account/ResetPassword`,
+      `Account/ResetPassword`,
       {
         email,
         password,
