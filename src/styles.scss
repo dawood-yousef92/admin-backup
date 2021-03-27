@@ -237,7 +237,7 @@ mat-table.mat-table {
   right: 10px;
   top: 10px;
   i::before {
-    font-size: 24px;
+    font-size: 18px;
     color: rgb(238, 39, 13);
   }
 }
@@ -251,7 +251,7 @@ mat-table.mat-table {
   left: 10px;
   top: 10px;
   i::before {
-    font-size: 24px;
+    font-size: 18px;
     color: rgb(245, 208, 0);
   }
 }
@@ -304,7 +304,7 @@ mat-table.mat-table {
   }
   mat-expansion-panel-header.mat-expanded mat-panel-title {
     color: #127c3b;
-    // font-family: $boldFont;
+    font-weight: bold;
   }
   .noSub {
     padding: 5px 10px;
@@ -328,4 +328,7 @@ mat-table.mat-table {
 }
 .c-black {
   color:#000;
+}
+.c-primary {
+  color: $primary;
 }

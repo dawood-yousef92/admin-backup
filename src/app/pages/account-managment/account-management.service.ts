@@ -31,4 +31,8 @@ export class ManageAccountServise {
         return this.http.post<any>('manage/DeletePersonalData', password);
     }
     
+    deleteCompany(password): Observable<any> {
+        return this.http.post<any>('Companies/DeleteCompany', password);
+    }
+    
 }

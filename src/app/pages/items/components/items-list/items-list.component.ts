@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { LoaderService } from 'src/app/_metronic/core/services/loader.service';
+import { ItemsService } from '../../items.service';
 
 @Component({
   selector: 'app-items-list',
@@ -12,29 +13,29 @@ import { LoaderService } from 'src/app/_metronic/core/services/loader.service';
 export class ItemsListComponent implements OnInit {
   permissions = localStorage.getItem('permissions');
   customActions:any[] = [];
-  selectedUserId:string;
+  selectedProductId:string;
   dataSettings:any = {
     selectedRolesIds: [],
     searchText: "",
     sortBy: "",
     pageNumber: 0,
-    rowsPerPage: 10,
+    rowsPerPage: 5000000,
     selectedPageSize: 0
   }
 
-  displayedColumns: string[] = ['image', 'name', 'category', 'price', 'offerPrice', 'originalCountry',];
+  displayedColumns: string[] = ['imagePath', 'nameAr', 'nameEn', 'category', 'unitPrice', 'offerPrice', 'originCountry',];
   actions:any = [];
   gridData:any[] = [];
   @ViewChild('deleteModal', { static: false }) deleteModal: ElementRef;
   
-  constructor(private toaster: ToastrService, private router: Router,
+  constructor(private itemsService:ItemsService, private toaster: ToastrService, private router: Router,
     private loderService: LoaderService, private modalService: NgbModal) { }
 
   checkPermissions() {
-    if(this.permissions.includes('Users.UpdateUser') || true) {
+    if(this.permissions.includes('Products.UpdateProduct')) {
       this.customActions.push({name: 'edit', icon:'flaticon2-edit text-warning'})
     }
-    if(this.permissions.includes('Users.DeleteUser') || true) {
+    if(this.permissions.includes('Products.DeleteProduct')) {
       this.customActions.push({name: 'delete', icon:'flaticon2-trash text-danger'})
     }
     if(this.customActions.length > 0) {
@@ -43,13 +44,9 @@ export class ItemsListComponent implements OnInit {
   }
 
   actionsEvent(event) {
-    this.selectedUserId = event.rowId;
-    if(event.type === 'view') {
-      alert('view');
-    }
-    else if(event.type === 'edit') {
-      alert('edit');
-      // this.router.navigate([`/users/edit-user/${this.selectedUserId}`]);
+    this.selectedProductId = event.rowId;
+    if(event.type === 'edit') {
+      this.router.navigate([`/items/edit-item/${this.selectedProductId}`]);
     }
     else if(event.type === 'delete') {
       this.openCentred(this.deleteModal);
@@ -62,67 +59,33 @@ export class ItemsListComponent implements OnInit {
 
   confirmDelete() {
     this.modalService.dismissAll();
-    // this.usersService.deleteUser(this.selectedUserId).subscribe((data) => {
-    //   this.toaster.success(data.result);
-    //   this.getUsers();
-    //   this.modalService.dismissAll();
-    // });
+    this.itemsService.deleteProduct(this.selectedProductId).subscribe((data) => {
+      this.toaster.success(data.result);
+      this.getProducts();
+      this.modalService.dismissAll();
+    });
+  }
+
+  getProducts() {
+    this.loderService.setIsLoading = true;
+    this.itemsService.getProducts(this.dataSettings).subscribe((data) => {
+      console.log(data);
+      this.gridData = data.result.products.items.map((item) => {
+        item.imagePath = `<img src="${item.imagePath || './assets/images/default-img.png'}" class="img-table-col"/>`;
+        item.unitPrice = item.unitPrice +'  '+item.currency;
+        item.offerPrice = item.offerPrice +'  '+item.currency;
+        return item;
+      })
+      this.gridData = data.result.products.items;
+      this.loderService.setIsLoading = false;
+    },(error) => {
+      this.loderService.setIsLoading = false;
+    });
   }
 
   ngOnInit(): void {
     this.checkPermissions();
-    setTimeout(() => {
-      this.gridData = [
-        {
-          image:'<img src="./assets/images/Capture2.PNG" class="img-table-col"/>',
-          name:'dfgdger',
-          category:'Meat',
-          price:'30 JD',
-          offerPrice:'22 JD',
-          originalCountry:'Jordan',
-        },
-        {
-          image:'<img src="./assets/images/Capture3.PNG" class="img-table-col"/>',
-          name:'egegt',
-          category:'Meat',
-          price:'30 JD',
-          offerPrice:'22 JD',
-          originalCountry:'Jordan',
-        },
-        {
-          image:'<img src="./assets/images/Capture4.PNG" class="img-table-col"/>',
-          name:'Buffalo Meat',
-          category:'Meat',
-          price:'30 JD',
-          offerPrice:'22 JD',
-          originalCountry:'Jordan',
-        },
-        {
-          image:'<img src="./assets/images/Capture5.PNG" class="img-table-col"/>',
-          name:'dfdfgt',
-          category:'Meat',
-          price:'30 JD',
-          offerPrice:'22 JD',
-          originalCountry:'Jordan',
-        },
-        {
-          image:'<img src="./assets/images/Capture6.PNG" class="img-table-col"/>',
-          name:'dgfdfgd',
-          category:'Meat',
-          price:'30 JD',
-          offerPrice:'22 JD',
-          originalCountry:'Jordan',
-        },
-        {
-          image:'<img src="./assets/images/Capture7.PNG" class="img-table-col"/>',
-          name:'zsdfef',
-          category:'Meat',
-          price:'30 JD',
-          offerPrice:'22 JD',
-          originalCountry:'Jordan',
-        },
-      ];  
-    },0);
+    this.getProducts();
   }
 
 }

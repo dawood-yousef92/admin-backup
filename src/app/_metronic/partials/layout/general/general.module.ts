@@ -11,6 +11,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTabsModule } from '@angular/material/tabs';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { OfflineTableComponent } from './offline-table/offline-table.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   declarations: [DynamicTableComponent, OfflineTableComponent],
@@ -26,6 +27,7 @@ import { OfflineTableComponent } from './offline-table/offline-table.component';
       MatTabsModule,
       FormsModule,
       ReactiveFormsModule,
+      TranslateModule,
     ],
   exports: [DynamicTableComponent, OfflineTableComponent],
 })

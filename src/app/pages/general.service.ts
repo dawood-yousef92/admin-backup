@@ -12,26 +12,19 @@ export class GeneralService {
     constructor(private http: HttpClient){}
 
     getCountries(): Observable<any> {
-        return this.http.post<any>('Countries/GetCountries', {});
+        return this.http.post<any>('Lookups/GetCountries', {});
     }
     
-    // deleteRol(rolId:string): Observable<any> {
-    //     return this.http.delete<any>(+`/Roles/DeleteRole?id=${rolId}`);
-    // }
+    getUnitOfMeasurements(): Observable<any> {
+        return this.http.post<any>('Lookups/GetUnitOfMeasurements', {});
+    }
 
-    // createRole(rolData):Observable<any> {
-    //     return this.http.post<any>(Roles/CreateRole', rolData);
-    // }
+    getPackagingTypes(): Observable<any> {
+        return this.http.post<any>('Lookups/PackagingTypes', {});
+    }
+
+    getShelfLifeTypes(): Observable<any> {
+        return this.http.post<any>('Lookups/GetShelfLifeTypes', {});
+    }
     
-    // updateRol(rolData):Observable<any> {
-    //     return this.http.put<any>(Roles/UpdateRole', rolData);
-    // }
-
-    // getRolById(id):Observable<any> {
-    //     return this.http.post<any>(Roles/GetRole',id);
-    // }
-
-    // getPermessions():Observable<any> {
-    //     return this.http.post<any>(Permissions/GetPermissions', {isEagerLoaded: true});
-    // }
 }

@@ -13,12 +13,12 @@
                         <div class="col-md-4">
                             <div class="mb-4">
                                 <mat-form-field class="w-100">
-                                    <input class="py-2" type="text" matInput placeholder="Name" formControlName="name"/>    
+                                    <input class="py-1" type="text" matInput placeholder="Name" formControlName="name"/>    
                                 </mat-form-field>
                             </div>
                             <div class="mb-4">
                                 <mat-form-field class="w-100">
-                                    <mat-select placeholder="permessions" formControlName="permessions" multiple>
+                                    <mat-select class="py-1" placeholder="permessions" formControlName="permessions" multiple>
                                       <mat-optgroup class="custom-multiple-group-select" *ngFor="let permession of permessions">
                                         <mat-checkbox [checked]="checkIfSelectedAll(permession.id)" class="font-weight-bolder text-dark" (change)="selectAll($event, permession.id)">{{permession.name}}</mat-checkbox>  
                                         <mat-option *ngFor="let item of permession.permissions" [value]="item.id">

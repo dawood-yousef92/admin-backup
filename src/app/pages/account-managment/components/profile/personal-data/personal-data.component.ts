@@ -23,12 +23,12 @@ export class PersonalDataComponent implements OnInit {
     this.initForm();
   }
 
-  downloadPersonalData() {
-    this.manageAccountServise.downloadPersonalData()
-    .subscribe((data) => {
-      this.BlazorDownloadFile(data.result.fileName, data.result.contentType, data.result.personalData);
-    });
-  }
+  // downloadPersonalData() {
+  //   this.manageAccountServise.downloadPersonalData()
+  //   .subscribe((data) => {
+  //     this.BlazorDownloadFile(data.result.fileName, data.result.contentType, data.result.personalData);
+  //   });
+  // }
   
 
    BlazorDownloadFile(filename, contentType, content) {

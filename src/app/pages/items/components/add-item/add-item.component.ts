@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { GeneralService } from 'src/app/pages/general.service';
 import { LoaderService } from 'src/app/_metronic/core/services/loader.service';
@@ -22,14 +22,21 @@ export class AddItemComponent implements OnInit {
   croppedImage: any = '';
   itemImages:any = [];
   errorImg:boolean = false;
+  tags:any[] = [];
+  unitOfMeasurements:any[];
+  packagingTypes:any[];
+  shelfLifeTypes:any[];
+  productId:string;
+  product:any;
 
   categories:any;
-  selectedCat:any[] = [];
+  selectedCatName:string;
   closeResult = '';
 
   itemForm: FormGroup;
   constructor(private generalService:GeneralService,
               private itemsService:ItemsService,
+              private route: ActivatedRoute,
               private fb: FormBuilder,private toaster: ToastrService,
               private router: Router,
               private loderService: LoaderService,
@@ -38,32 +45,53 @@ export class AddItemComponent implements OnInit {
   initForm() {
     this.itemForm = this.fb.group(
     {
-      name: [
-        ''
+      code: [
+        this.product?.code || ''
+      ],
+      minimumOrderQuantity: [
+        this.product?.minimumOrderQuantity || null
+      ],
+      nameEn: [
+        this.product?.nameEn || ''
       ],
       nameAr: [
-        ''
+        this.product?.nameAr || ''
       ],
-      description: [
-        ''
+      descriptionEn: [
+        this.product?.descriptionEn || ''
       ],
       descriptionAr: [
-        ''
+        this.product?.descriptionAr || ''
       ],
-      price: [
-        null
+      unitPrice: [
+        this.product?.unitPrice || null
       ],
       offerPrice: [
-        null
+        this.product?.offerPrice || null
       ],
-      originalCountry: [
-        null
+      originCountryId: [
+        this.product?.originCountryId || null
       ],
-      primaryImage: [
-        0
+      defaultImageIndex: [
+        this.product?.defaultImageIndex || 0
+      ],
+      shelfLifeDuration: [
+        this.product?.shelfLifeDuration || null
+      ],
+      shelfLifeType: [
+        this.product?.shelfLifeType || ''
+      ],
+      unitOfMeasurementId: [
+        this.product?.unitOfMeasurementId || ''
+      ],
+      packagingTypeId: [
+        this.product?.packagingTypeId || ''
+      ],
+      categoryId: [
+        this.product?.categoryId || ''
       ],
       isActive: [
-        true
+        this.product?.isActive || true
       ],
     });
   }
@@ -80,18 +108,36 @@ export class AddItemComponent implements OnInit {
     }
   }
 
-  submit() {
-    alert('saved');
-  }
-
   ngOnInit(): void {
     this.getCountries();
     this.initForm();
-    this.getCategoriesByBusinessType();
+    this.getCompanyCategories();
+    this.getUnitOfMeasurements();
+    this.getShelfLifeTypes();
+    this.getPackagingTypes();
+    this.route.params.subscribe((data) => {
+      this.productId = data.id;
+      if(this.productId) {
+        this.getProduct();
+      }
+    });
   }
 
-  test() {
-    console.log(this.itemImages);
+  getProduct() {
+    this.loderService.setIsLoading = true;
+    this.itemsService.getProduct(this.productId).subscribe((data) => {
+      console.log(data);
+      this.product = data.result.productForEdit;
+      this.tags = this.product.tags.split(',');
+      this.product.images.map((item) => {
+        this.itemImages.push({base64:item.imagePath, file:null});
+        if(item.isDefault) {
+          this.product.defaultImageIndex = this.product.images.indexOf(item);
+        }
+      })
+      this.initForm();
+      this.loderService.setIsLoading = false;
+    })
   }
 
   selectFile() {
@@ -106,7 +152,7 @@ export class AddItemComponent implements OnInit {
   }
 
   deleteImg(img) {
-    this.itemForm.get('primaryImage').setValue(0);
+    this.itemForm.get('defaultImageIndex').setValue(0);
     this.itemImages.splice(this.itemImages.indexOf(img),1);
   }
 
@@ -168,15 +214,117 @@ export class AddItemComponent implements OnInit {
     }
   }
 
-  getCategoriesByBusinessType() {
-    this.selectedCat = [];
+  addTag() {
+    let tagInput = (document.getElementById('tagInput') as HTMLInputElement);
+    if(tagInput.value) {
+      this.tags.push(tagInput.value);
+    }
+    tagInput.value = null;
+  }
+
+  removeTag(tag) {
+    this.tags.splice(this.tags.indexOf(tag),1);
+  }
+
+  getUnitOfMeasurements() {
+    this.generalService.getUnitOfMeasurements().subscribe((data) => {
+      this.unitOfMeasurements = data.result.unitOfMeasurements;
+    });
+  }
+
+  getPackagingTypes() {
+    this.generalService.getPackagingTypes().subscribe((data) => {
+      this.packagingTypes = data.result.packagingTypeItems;
+    });
+  }
+
+  getShelfLifeTypes() {
+    this.generalService.getShelfLifeTypes().subscribe((data) => {
+      this.shelfLifeTypes = data.result.shelfLifeTypeItem;
+    });
+  }
+
+  getCompanyCategories() {
+    this.selectedCatName = '';
     this.loderService.setIsLoading = true;
-    this.itemsService.getCategoriesByBusinessType(3).subscribe((data) => {
-      this.categories = data.result.productsCategoryItem.concat(data.result.servicesCategoryItem);
+    this.itemsService.getCompanyCategories().subscribe((data) => {
+      console.log(data);
+      this.categories = data.result.categoryItem;
       this.loderService.setIsLoading = false;
     },(error) => {
       this.loderService.setIsLoading = false;
     });
+  }
+
+  selectCat(e) {
+    this.itemForm.get('categoryId').setValue(e.value);
+    this.findNested(this.categories, this.itemForm.controls.categoryId.value) 
+  }
+
+  findNested(obj, value) {
+    obj.map((item) => {
+      if(item.id === value) {
+        console.log(item.name);
+        this.selectedCatName = item.name;
+        return item.name;
+      }
+      if(item.categories.length > 0) {
+        this.findNested(item.categories, value);
+      }
+    })
+  }
+
+  submit() {
+    this.loderService.setIsLoading = true;
+    var formData: FormData = new FormData();
+    formData.append('code',this.itemForm.controls.code.value);
+    formData.append('nameEn',this.itemForm.controls.nameEn.value);
+    formData.append('nameAr',this.itemForm.controls.nameAr.value);
+    formData.append('descriptionEn',this.itemForm.controls.descriptionEn.value);
+    formData.append('descriptionAr',this.itemForm.controls.descriptionAr.value);
+    formData.append('unitPrice',this.itemForm.controls.unitPrice.value);
+    formData.append('offerPrice',this.itemForm.controls.offerPrice.value);
+    formData.append('originCountryId',this.itemForm.controls.originCountryId.value);
+    formData.append('shelfLifeDuration',this.itemForm.controls.shelfLifeDuration.value);
+    formData.append('shelfLifeType',this.itemForm.controls.shelfLifeType.value);
+    formData.append('unitOfMeasurementId',this.itemForm.controls.unitOfMeasurementId.value);
+    formData.append('packagingTypeId',this.itemForm.controls.packagingTypeId.value);
+    formData.append('isActive',this.itemForm.controls.isActive.value);
+    formData.append('defaultImageIndex',this.itemForm.controls.defaultImageIndex.value);
+    formData.append('categoryId',this.itemForm.controls.categoryId.value);
+    formData.append('minimumOrderQuantity',this.itemForm.controls.minimumOrderQuantity.value);
+    let tags = this.tags.join(',');
+    formData.append('tags',tags);
+    if(!this.productId) {
+      for(let i = 0; i < this.itemImages.length; i++) {
+        formData.append("productImage", this.itemImages[i].file as File, this.itemImages[i].file['name']);
+      }
+      this.itemsService.createProduct(formData).subscribe((data) => {
+        this.toaster.success(data.result.successMessage);
+        this.loderService.setIsLoading = false;
+        this.router.navigate(['/items']);
+      }, (error) => {
+        this.loderService.setIsLoading = false;
+      });
+    }
+    else {
+      formData.append('id',this.productId);
+      for(let i = 0; i < this.itemImages.length; i++) {
+        if(this.itemImages[i].file) {
+          formData.append("productImage", this.itemImages[i].file as File, this.itemImages[i].file['name']);
+        }
+        else {
+          formData.append("productImagesIds", this.itemImages[i].base64);
+        }
+      }
+      this.itemsService.updateProduct(formData).subscribe((data) => {
+        this.toaster.success(data.result.successMessage);
+        this.loderService.setIsLoading = false;
+        this.router.navigate(['/items']);
+      }, (error) => {
+        this.loderService.setIsLoading = false;
+      });
+    }
   }
 
 }

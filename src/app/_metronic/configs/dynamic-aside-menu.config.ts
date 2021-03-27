@@ -54,7 +54,7 @@ export const DynamicAsideMenuConfig = {
       bullet: "dot",
       translate: "MENU.ITEMS",
       page: "/items",
-      permission: "noPermission",
+      permission: "Products.",
     },
     {
       title: "Settings",

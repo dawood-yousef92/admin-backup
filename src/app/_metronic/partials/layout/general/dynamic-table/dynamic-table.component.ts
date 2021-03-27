@@ -44,18 +44,7 @@ export class DynamicTableComponent implements OnInit {
   }
 
   action(type, id) {
-    if(type === 'edit') {
-      this.actionsEvent.emit({type:'edit', rowId:id});
-    }
-    else if (type === 'view') {
-      this.actionsEvent.emit({type:'view', rowId:id});
-    }
-    else if (type === 'delete') {
-      this.actionsEvent.emit({type:'delete', rowId:id});
-    }
-    else {
-      this.actionsEvent.emit({type:type, rowId:id});
-    }
+    this.actionsEvent.emit({type:type, rowId:id});
   }
 
   isDisabledSort(col) {

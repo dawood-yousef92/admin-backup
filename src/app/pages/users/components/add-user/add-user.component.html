@@ -27,17 +27,17 @@
                                 <div class="col-md-4">
                                     <div class="mb-4">
                                         <mat-form-field class="w-100">
-                                            <input class="py-2" type="text" matInput placeholder="Name" formControlName="name"/>    
+                                            <input class="py-1" type="text" matInput placeholder="Name" formControlName="name"/>    
                                         </mat-form-field>
                                     </div>
                                     <div class="mb-4">
                                         <mat-form-field class="w-100">
-                                            <input class="py-2" type="text" matInput placeholder="Surname" formControlName="surname"/>    
+                                            <input class="py-1" type="text" matInput placeholder="Surname" formControlName="surname"/>    
                                         </mat-form-field>
                                     </div>
                                     <div class="mb-4">
                                         <mat-form-field class="w-100">
-                                            <input class="py-2" type="text" matInput placeholder="Email" formControlName="email"/>
+                                            <input class="py-1" type="text" matInput placeholder="Email" formControlName="email"/>
                                         </mat-form-field>
                                         <mat-error
                                             [ngTemplateOutlet]="formError"
@@ -50,7 +50,7 @@
                                     </div>
                                     <div class="mb-4">
                                         <mat-form-field class="w-100">
-                                            <input class="py-2" type="text" matInput placeholder="Phone Number" formControlName="phoneNumber"/>
+                                            <input class="py-1" type="text" matInput placeholder="Phone Number" formControlName="phoneNumber"/>
                                             <mat-error
                                                 [ngTemplateOutlet]="formError"
                                                 [ngTemplateOutletContext]="{
@@ -66,12 +66,12 @@
                                     </div>
                                     <div *ngIf="!addUser.controls.setRandomPassword.value && !userId" class="mb-4">
                                         <mat-form-field class="w-100">
-                                            <input class="py-2" type="password" matInput placeholder="Password" formControlName="password"/>    
+                                            <input class="py-1" type="password" matInput placeholder="Password" formControlName="password"/>    
                                         </mat-form-field>
                                     </div>
                                     <div *ngIf="!addUser.controls.setRandomPassword.value && !userId" class="mb-4">
                                         <mat-form-field class="w-100">
-                                            <input class="py-2" type="password" matInput placeholder="New password confirmation" formControlName="cPassword"/>
+                                            <input class="py-1" type="password" matInput placeholder="New password confirmation" formControlName="cPassword"/>
                                             <mat-error
                                                 [ngTemplateOutlet]="formError"
                                                 [ngTemplateOutletContext]="{
@@ -96,7 +96,7 @@
                                 <div class="col-md-4">
                                     <div class="mb-4">
                                         <mat-form-field class="w-100">
-                                            <mat-select placeholder="Select Groups" formControlName="assignedRolesIds" multiple>
+                                            <mat-select class="py-1" placeholder="Select Groups" formControlName="assignedRolesIds" multiple>
                                             <mat-option *ngFor="let rol of rols" [value]="rol.id">{{rol.name}}</mat-option>
                                             </mat-select>
                                         </mat-form-field>

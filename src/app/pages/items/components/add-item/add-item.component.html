@@ -10,44 +10,29 @@
                 <div class="col-md-6">
                     <div class="mb-4">
                         <mat-form-field class="w-100">
-                            <input class="py-2" type="text" matInput placeholder="Name" formControlName="name"/>    
+                            <input class="py-1" type="text" matInput placeholder="Code" formControlName="code"/>
                         </mat-form-field>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="mb-4">
-                        <mat-form-field class="w-100">
-                            <input class="py-2" type="text" matInput placeholder="Arabic Name" formControlName="nameAr"/>    
-                        </mat-form-field>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="mb-4">
-                        <mat-form-field class="w-100">
-                            <input class="py-2" type="text" matInput placeholder="Description" formControlName="description"/>    
-                        </mat-form-field>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="mb-4">
-                        <mat-form-field class="w-100">
-                            <input class="py-2" type="text" matInput placeholder="Arabic Description" formControlName="descriptionAr"/>    
-                        </mat-form-field>
-                    </div>
+                <div class="col-md-6 mb-4">
+                    <button type="button" class="btn btn-primary" (click)="openModal(catModal)">Select Category</button>
+                    <span class="mx-2 label label-xl label-light-primary label-inline" *ngIf="itemForm.controls.categoryId.value">
+                        {{selectedCatName}}
+                    </span>
                 </div>
                 <div class="col-md-6">
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col-md-6">
                             <div class="mb-4">
                                 <mat-form-field class="w-100">
-                                    <input class="py-2" type="number" matInput placeholder="Price" formControlName="price"/>    
+                                    <input class="py-1" type="text" matInput placeholder="Name" formControlName="nameEn"/>
                                 </mat-form-field>
                             </div>
                         </div>
-                        <div class="col-6">
+                        <div class="col-md-6">
                             <div class="mb-4">
                                 <mat-form-field class="w-100">
-                                    <input class="py-2" type="number" matInput placeholder="Offer Price" formControlName="offerPrice"/>    
+                                    <input class="py-1" type="text" matInput placeholder="Arabic Name" formControlName="nameAr"/>
                                 </mat-form-field>
                             </div>
                         </div>
@@ -56,7 +41,7 @@
                 <div class="col-md-6">
                     <div class="mb-4">
                         <mat-form-field class="w-100">
-                            <mat-select class="py-2" formControlName="originalCountry" placeholder="Original Country">
+                            <mat-select class="py-1" formControlName="originCountryId" placeholder="Original Country">
                                 <div class="p-2 filter">
                                     <mat-form-field appearance="outline" class="w-100">
                                         <input matInput (keyup)="search($event.target.value,'countries')" (keydown)="$event.stopPropagation()" class="w-100">
@@ -71,41 +56,131 @@
                             </mat-select>
                         </mat-form-field>
                     </div>
-                </div>
-                <div class="col-md-6 mb-4">
-                    <!-- <mat-form-field class="w-100 mb-3">
-                        <mat-select formControlName="businessType" placeholder="Main Major Type" (selectionChange)="getCategoriesByBusinessType()" required>
-                            <mat-option *ngFor="let companyBusinessType of companyBusinessTypes" [value]="companyBusinessType.key">{{companyBusinessType.value}}</mat-option>
-                        </mat-select>
-                    </mat-form-field> -->
-                    <button type="button" class="btn btn-primary" (click)="openModal(catModal)">Select Category</button>
-                    <div class="chips-list" *ngIf="selectedCat.length > 0">
-                        <span class="chip" *ngFor="let cat of selectedCat">
-                            {{cat.name}} 
-                            <!-- <mat-icon role="img" (click)="removeCat(cat)" class="cursor-pointer ml-2 mat-icon notranslate mat-chip-remove mat-chip-trailing-icon material-icons">cancel</mat-icon> -->
-                        </span>
+                </div> 
+                <div class="col-md-6">
+                    <div class="mb-4">
+                        <mat-form-field class="w-100">
+                            <input class="py-1" type="text" matInput placeholder="Description" formControlName="descriptionEn"/>
+                        </mat-form-field>
                     </div>
                 </div>
-                <div class="col-12 mb-4">
+                <div class="col-md-6">
+                    <div class="mb-4">
+                        <mat-form-field class="w-100">
+                            <input class="py-1" type="text" matInput placeholder="Arabic Description" formControlName="descriptionAr"/> 
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="mb-4">
+                                <mat-form-field class="w-100">
+                                    <input class="py-1" type="number" matInput placeholder="Price" formControlName="unitPrice"/>
+                                    <span matSuffix class="ml-3">SAR</span>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-4">
+                                <mat-form-field class="w-100">
+                                    <span matSuffix class="ml-3">SAR</span>
+                                    <input class="py-1" type="number" matInput placeholder="Offer Price" formControlName="offerPrice"/>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="mb-4">
+                                <mat-form-field class="w-100">
+                                    <mat-select class="py-1" placeholder="Shelf Life Types" formControlName="shelfLifeType">
+                                        <mat-option *ngFor="let item of shelfLifeTypes" [value]="item.id">
+                                            {{item.name}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-4">
+                                <mat-form-field class="w-100">
+                                    <input class="py-1" type="number" matInput placeholder="Shelf Life Duration" formControlName="shelfLifeDuration"/>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="mb-4">
+                                <mat-form-field class="w-100">
+                                    <mat-select class="py-1" placeholder="Unit Of Measurements" formControlName="unitOfMeasurementId">
+                                        <mat-option *ngFor="let item of unitOfMeasurements" [value]="item.id">
+                                            {{item.name}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-4">
+                                <mat-form-field class="w-100">
+                                    <input class="py-1" type="number" matInput placeholder="Minimum Order Quantity" formControlName="minimumOrderQuantity"/>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="mb-4">
+                        <mat-form-field class="w-100">
+                            <mat-select class="py-1" placeholder="Packaging Types" formControlName="packagingTypeId">
+                                <mat-option *ngFor="let item of packagingTypes" [value]="item.id">
+                                    {{item.name}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-4">
+                        <div class="d-flex align-items-start">
+                            <mat-form-field class="w-100">
+                                <input id="tagInput" class="py-1" type="text" matInput placeholder="Tags"/>
+                            </mat-form-field>
+                            <button type="button" class="btn btn-primary px-3 py-2" (click)="addTag()"><h2 class="mb-0">+</h2></button>  
+                        </div>
+                        <div class="d-flex flex-wrap">
+                            <span class="mr-2 mb-2 label label-lg label-light-primary label-inline" *ngFor="let tag of tags">
+                                {{tag}}
+                                <button type="button" class="ml-2 label label-lg label-light-primary label-inline border-0 p-1 text-bold" (click)="removeTag(tag)">
+                                    <i class="c-primary flaticon-circle"></i>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 mb-4">
                     <div class="row">    
                         <div class="col-12 mb-3">
                             <input id="select-file" class="d-none" type="file" (change)="fileChangeEvent($event)" onclick="this.value = null"
                                 accept="image/png, image/jpeg, image/jpg" />
                             <button [disabled]="itemImages.length > 3" (click)="selectFile()" type="button" class="btn btn-primary">Add Item Images<i class="flaticon-upload-1 text-white ml-2"></i></button>
                         </div>
-                        <div class="col-md-3" *ngFor="let img of itemImages; let i = index">
+                        <div class="col-md-4 mb-3" *ngFor="let img of itemImages; let i = index">
                             <div class="position-relative">
-                                <button type="button" class="make-primary" (click)="itemForm.get('primaryImage').setValue(i)">
-                                    <i *ngIf="i !== itemForm.controls.primaryImage.value" class="far fa-star"></i>
-                                    <i *ngIf="i === itemForm.controls.primaryImage.value" class="fas fa-star"></i>
+                                <button type="button" class="make-primary" (click)="itemForm.get('defaultImageIndex').setValue(i)">
+                                    <i *ngIf="i !== itemForm.controls.defaultImageIndex.value" class="far fa-star"></i>
+                                    <i *ngIf="i === itemForm.controls.defaultImageIndex.value" class="fas fa-star"></i>
                                 </button>
                                 <button type="button" class="delete-item" (click)="deleteImg(img)"><i class="flaticon-circle"></i></button>
-                                <img [src]="img.base64" class="w-100"/>
+                                <img [src]="img.base64" class="w-100 cursor-pointer" (click)="itemForm.get('defaultImageIndex').setValue(i)"/>
                             </div>
                         </div>
-                        <!-- <div>
-                            <button type="button" (click)="test()">test</button>
-                        </div> -->
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -130,7 +205,7 @@
         <span aria-hidden="true">&times;</span>
       </button>
     </div>
-    <div class="modal-body">   
+    <div class="modal-body">
         <image-cropper
             [imageChangedEvent]="imageChangedEvent"
             [maintainAspectRatio]="true"
@@ -158,7 +233,6 @@
             <mat-expansion-panel *ngIf="cat.categories?.length > 0">
                 <mat-expansion-panel-header>
                     <mat-panel-title>
-                        <!-- <mat-checkbox [checked]="isChecked(cat)" (click)="clickCat($event)" (change)="selectCat($event,cat)" class="mx-2"></mat-checkbox>  -->
                         {{cat?.name}}
                     </mat-panel-title>
                 </mat-expansion-panel-header>
@@ -166,8 +240,7 @@
                 </div>
             </mat-expansion-panel>
             <mat-panel-title *ngIf="cat.categories?.length === 0" class="mat-expansion-panel-header-title noSub">
-                <!-- <mat-checkbox [checked]="isChecked(cat)" (click)="clickCat($event)" (change)="selectCat($event,cat,'sub')" class="mx-2"></mat-checkbox>  -->
-                {{cat?.name}}
+                <mat-radio-button [checked]="itemForm.controls.categoryId.value === cat?.id" (change)="selectCat($event)" [value]="cat?.id">{{cat?.name}}</mat-radio-button>
             </mat-panel-title>
         </ng-container>
     </ng-container>
@@ -181,24 +254,24 @@
         </button>
     </div>
     <div class="modal-body categories-modal-body">
-        <mat-accordion class="custom-tree">
-            <ng-container *ngFor="let cat of categories">
-                <mat-expansion-panel *ngIf="cat.categories?.length > 0">
-                    <mat-expansion-panel-header>
-                        <mat-panel-title>
-                            <!-- <mat-checkbox [checked]="isChecked(cat)" (click)="clickCat($event)" (change)="selectCat($event,cat,'main')" class="mx-2"></mat-checkbox>  -->
-                            {{cat.name}}
-                        </mat-panel-title>
-                    </mat-expansion-panel-header>
-                    <div *ngIf="cat.categories?.length > 0" [ngTemplateOutlet]="subCat" [ngTemplateOutletContext]="{categories:cat.categories}">
-                    </div>
-                </mat-expansion-panel>
-                <mat-panel-title *ngIf="cat.categories?.length === 0" class="mat-expansion-panel-header-title noSub">
-                    <!-- <mat-checkbox [checked]="isChecked(cat)" (click)="clickCat($event)" (change)="selectCat($event,cat,'sub')" class="mx-2"></mat-checkbox>  -->
-                    {{cat?.name}}
-                </mat-panel-title>
-            </ng-container>
-        </mat-accordion>    
+        <mat-radio-group>
+            <mat-accordion class="custom-tree">
+                <ng-container *ngFor="let cat of categories">
+                    <mat-expansion-panel *ngIf="cat.categories?.length > 0">
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                {{cat.name}}
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <div *ngIf="cat.categories?.length > 0" [ngTemplateOutlet]="subCat" [ngTemplateOutletContext]="{categories:cat.categories}">
+                        </div>
+                    </mat-expansion-panel>
+                    <mat-panel-title *ngIf="cat.categories?.length === 0" class="mat-expansion-panel-header-title noSub">
+                        <mat-radio-button (change)="selectCat($event)" [value]="cat?.id">{{cat?.name}}</mat-radio-button>
+                    </mat-panel-title>
+                </ng-container>
+            </mat-accordion>    
+        </mat-radio-group>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-primary" (click)="modal.dismiss('Cross click')">Done</button>

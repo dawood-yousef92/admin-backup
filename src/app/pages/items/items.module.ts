@@ -16,6 +16,7 @@ import { AddItemComponent } from './components/add-item/add-item.component';
 import { ItemsListComponent } from './components/items-list/items-list.component';
 import {MatIconModule} from '@angular/material/icon';
 import { ImageCropperModule } from 'ngx-image-cropper';
+import {MatRadioModule} from '@angular/material/radio';
 import {MatExpansionModule} from '@angular/material/expansion';
 
 
@@ -35,14 +36,26 @@ import {MatExpansionModule} from '@angular/material/expansion';
             {
                 path: '',
                 component: ItemsListComponent,
+                canActivate: [RoleGuard], 
+                data: { 
+                  expectedRole: 'Products.GetProducts'
+                }     
             },
             {
                 path: 'add-item',
                 component: AddItemComponent,
-                // canActivate: [RoleGuard], 
-                // data: { 
-                //   expectedRole: 'Users.GetUsers'
-                // }
+                canActivate: [RoleGuard], 
+                data: { 
+                  expectedRole: 'Products.CreateProduct'
+                }
+            },
+            {
+                path: 'edit-item/:id',
+                component: AddItemComponent,
+                canActivate: [RoleGuard], 
+                data: { 
+                  expectedRole: 'Products.UpdateProduct'
+                }
             },
         ]
       },
@@ -51,6 +64,7 @@ import {MatExpansionModule} from '@angular/material/expansion';
     MatInputModule,
     MatFormFieldModule,
     MatCheckboxModule,
+    MatRadioModule,
     MatSelectModule,
     MatTabsModule,
     GeneralModule,

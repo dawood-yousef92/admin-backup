@@ -6,6 +6,7 @@
         <ng-container *ngFor="let col of displayedColumns">
           <ng-container *ngIf="col !== 'actions'" matColumnDef="{{col}}">
             <mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="isDisabledSort(col)">
+              <!-- {{"MENU."+(col | uppercase) | translate}} -->
               {{col | uppercase}}
             </mat-header-cell>
             <mat-cell *matCellDef="let row" [innerHTML]="row[col]"></mat-cell>

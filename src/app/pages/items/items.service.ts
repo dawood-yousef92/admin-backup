@@ -8,7 +8,28 @@ import { Observable } from 'rxjs';
 export class ItemsService {
     constructor(private http: HttpClient){}
 
-    getCategoriesByBusinessType(businessType): Observable<any> {
-        return this.http.post<any>('Companies/GetCategoriesByBusinessType', {businessType:businessType});
+    getCompanyCategories(): Observable<any> {
+        return this.http.get<any>('Products/GetCompanyCategories');
     }
+
+    getProducts(dataSettings): Observable<any> {
+        return this.http.post<any>('Products/GetProducts', dataSettings);
+    }
+    
+    createProduct(formData): Observable<any> {
+        return this.http.post<any>('Products/CreateProduct', formData);
+    }
+
+    deleteProduct(id): Observable<any> {
+        return this.http.delete<any>(`Products/DeleteProduct?id=${id}`);
+    }
+
+    getProduct(id): Observable<any> {
+        return this.http.post<any>('Products/GetProduct', {id:id});
+    }
+
+    updateProduct(formData): Observable<any> {
+        return this.http.put<any>('Products/UpdateProduct', formData);
+    }
+
 }
