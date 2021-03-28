@@ -178,7 +178,7 @@
                                     <i *ngIf="i === itemForm.controls.defaultImageIndex.value" class="fas fa-star"></i>
                                 </button>
                                 <button type="button" class="delete-item" (click)="deleteImg(img)"><i class="flaticon-circle"></i></button>
-                                <img [src]="img.base64" class="w-100 cursor-pointer" (click)="itemForm.get('defaultImageIndex').setValue(i)"/>
+                                <img [src]="img.base64.imagePath || img.base64" class="w-100 cursor-pointer" (click)="itemForm.get('defaultImageIndex').setValue(i)"/>
                             </div>
                         </div>
                     </div>

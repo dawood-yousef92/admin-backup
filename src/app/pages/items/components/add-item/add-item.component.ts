@@ -130,13 +130,14 @@ export class AddItemComponent implements OnInit {
       this.product = data.result.productForEdit;
       this.tags = this.product.tags.split(',');
       this.product.images.map((item) => {
-        this.itemImages.push({base64:item.imagePath, file:null});
+        this.itemImages.push({base64:item, file:null});
         if(item.isDefault) {
           this.product.defaultImageIndex = this.product.images.indexOf(item);
         }
       })
       this.initForm();
       this.loderService.setIsLoading = false;
+      this.findNested(this.categories, this.product?.categoryId)
     })
   }
 
@@ -262,16 +263,23 @@ export class AddItemComponent implements OnInit {
   }
 
   findNested(obj, value) {
-    obj.map((item) => {
-      if(item.id === value) {
-        console.log(item.name);
-        this.selectedCatName = item.name;
-        return item.name;
-      }
-      if(item.categories.length > 0) {
-        this.findNested(item.categories, value);
-      }
-    })
+    if(!obj) {
+      setTimeout(() => {
+        this.findNested(this.categories, this.itemForm.controls.categoryId.value);
+      },1500)
+    }
+    else {
+      obj.map((item) => {
+        if(item.id === value) {
+          console.log(item.name);
+          this.selectedCatName = item.name;
+          return item.name;
+        }
+        if(item.categories.length > 0) {
+          this.findNested(item.categories, value);
+        }
+      })
+    }
   }
 
   submit() {
@@ -314,7 +322,7 @@ export class AddItemComponent implements OnInit {
           formData.append("productImage", this.itemImages[i].file as File, this.itemImages[i].file['name']);
         }
         else {
-          formData.append("productImagesIds", this.itemImages[i].base64);
+          formData.append("productImagesIds", this.itemImages[i].base64.id);
         }
       }
       this.itemsService.updateProduct(formData).subscribe((data) => {
