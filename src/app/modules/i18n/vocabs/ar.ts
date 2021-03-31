@@ -28,6 +28,8 @@ export const locale = {
         ITEMS: 'بطاقة الصنف',
         ITEMS_LIST: 'قائمة بطاقات الأصناف',
         ADD_ITEM: 'اضافة بطاقة صنف',
+        ORDERS: 'الطلبات',
+
       },
       AUTH: {
         GENERAL: {

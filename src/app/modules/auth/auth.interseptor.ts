@@ -34,16 +34,16 @@ export class AuthInterceptor implements HttpInterceptor {
         request = request.clone({
           setHeaders: {
               Authorization: 'Bearer ' + token.replace(/\"/g, ""),
-            // "X-Tenant": tanent,
-            "X-Tenant": 'dawood_company',
+            "X-Tenant": tanent,
+            // "X-Tenant": 'dawood_company',
           },
         });
       }
       else {
         request = request.clone({
           setHeaders: {
-            // "X-Tenant": tanent,
-            "X-Tenant": 'dawood_company',
+            "X-Tenant": tanent,
+            // "X-Tenant": 'dawood_company',
           },
         });
       }
@@ -58,8 +58,8 @@ export class AuthInterceptor implements HttpInterceptor {
             window.location.href = ('auth/login');
         }
 
-        if(err.error.validationErrors) {
-          const error = err.error.validationErrors;
+        if(err.error.responseException.validationErrors) {
+          const error = err.error.responseException.validationErrors;
           error.map((item) => {
               this.toaster.error(item.reason);
           })

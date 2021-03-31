@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { GeneralService } from 'src/app/pages/general.service';
@@ -52,10 +52,16 @@ export class AddItemComponent implements OnInit {
         this.product?.minimumOrderQuantity || null
       ],
       nameEn: [
-        this.product?.nameEn || ''
+        this.product?.nameEn || '',
+        Validators.compose([
+          Validators.required,
+        ]),
       ],
       nameAr: [
-        this.product?.nameAr || ''
+        this.product?.nameAr || '',
+        Validators.compose([
+          Validators.required,
+        ]),
       ],
       descriptionEn: [
         this.product?.descriptionEn || ''
@@ -64,13 +70,19 @@ export class AddItemComponent implements OnInit {
         this.product?.descriptionAr || ''
       ],
       unitPrice: [
-        this.product?.unitPrice || null
+        this.product?.unitPrice || null,
+        Validators.compose([
+          Validators.required,
+        ]),
       ],
       offerPrice: [
         this.product?.offerPrice || null
       ],
       originCountryId: [
-        this.product?.originCountryId || null
+        this.product?.originCountryId || null,
+        Validators.compose([
+          Validators.required,
+        ]),
       ],
       defaultImageIndex: [
         this.product?.defaultImageIndex || 0
@@ -149,7 +161,6 @@ export class AddItemComponent implements OnInit {
   fileChangeEvent(event: any): void {
     this.imageChangedEvent = event;
     this.modalService.open(this.cropModal, { centered: true } );
-
   }
 
   deleteImg(img) {
@@ -251,6 +262,9 @@ export class AddItemComponent implements OnInit {
     this.itemsService.getCompanyCategories().subscribe((data) => {
       console.log(data);
       this.categories = data.result.categoryItem;
+      if(this.categories.length > 0 && this.itemForm.controls.categoryId.value) {
+        this.findNested(this.categories, this.itemForm.controls.categoryId.value);
+      }
       this.loderService.setIsLoading = false;
     },(error) => {
       this.loderService.setIsLoading = false;
@@ -263,23 +277,16 @@ export class AddItemComponent implements OnInit {
   }
 
   findNested(obj, value) {
-    if(!obj) {
-      setTimeout(() => {
-        this.findNested(this.categories, this.itemForm.controls.categoryId.value);
-      },1500)
-    }
-    else {
-      obj.map((item) => {
-        if(item.id === value) {
-          console.log(item.name);
-          this.selectedCatName = item.name;
-          return item.name;
-        }
-        if(item.categories.length > 0) {
-          this.findNested(item.categories, value);
-        }
-      })
-    }
+    obj?.map((item) => {
+      if(item.id === value) {
+        console.log(item.name);
+        this.selectedCatName = item.name;
+        return item.name;
+      }
+      if(item.categories.length > 0) {
+        this.findNested(item.categories, value);
+      }
+    })
   }
 
   submit() {
@@ -305,7 +312,7 @@ export class AddItemComponent implements OnInit {
     formData.append('tags',tags);
     if(!this.productId) {
       for(let i = 0; i < this.itemImages.length; i++) {
-        formData.append("productImage", this.itemImages[i].file as File, this.itemImages[i].file['name']);
+        formData.append("productImages", this.itemImages[i].file as File, this.itemImages[i].file['name']);
       }
       this.itemsService.createProduct(formData).subscribe((data) => {
         this.toaster.success(data.result.successMessage);
@@ -319,7 +326,7 @@ export class AddItemComponent implements OnInit {
       formData.append('id',this.productId);
       for(let i = 0; i < this.itemImages.length; i++) {
         if(this.itemImages[i].file) {
-          formData.append("productImage", this.itemImages[i].file as File, this.itemImages[i].file['name']);
+          formData.append("productImages", this.itemImages[i].file as File, this.itemImages[i].file['name']);
         }
         else {
           formData.append("productImagesIds", this.itemImages[i].base64.id);

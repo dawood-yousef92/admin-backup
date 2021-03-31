@@ -1,7 +1,8 @@
 <div class="card card-custom example-preview">
     <div class="card-header">
       <div class="card-title">
-        <h3 class="card-label">{{ "MENU.ADD_ITEM" | translate }}</h3>
+        <h3 *ngIf="!productId" class="card-label">{{ "MENU.ADD_ITEM" | translate }}</h3>
+        <h3 *ngIf="productId" class="card-label">Edit Item</h3>
       </div>
     </div>
     <div class="card-body">
@@ -25,14 +26,30 @@
                         <div class="col-md-6">
                             <div class="mb-4">
                                 <mat-form-field class="w-100">
-                                    <input class="py-1" type="text" matInput placeholder="Name" formControlName="nameEn"/>
+                                    <input class="py-1" type="text" matInput placeholder="Name" formControlName="nameEn" required/>
+                                    <mat-error
+                                        [ngTemplateOutlet]="formError"
+                                        [ngTemplateOutletContext]="{
+                                        validation: 'required',
+                                        message: 'This field is required',
+                                        control: itemForm.controls['nameEn']
+                                        }"
+                                    ></mat-error>
                                 </mat-form-field>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-4">
                                 <mat-form-field class="w-100">
-                                    <input class="py-1" type="text" matInput placeholder="Arabic Name" formControlName="nameAr"/>
+                                    <input class="py-1" type="text" matInput placeholder="Arabic Name" formControlName="nameAr" required/>
+                                    <mat-error
+                                        [ngTemplateOutlet]="formError"
+                                        [ngTemplateOutletContext]="{
+                                        validation: 'required',
+                                        message: 'This field is required',
+                                        control: itemForm.controls['nameAr']
+                                        }"
+                                    ></mat-error>
                                 </mat-form-field>
                             </div>
                         </div>
@@ -41,7 +58,7 @@
                 <div class="col-md-6">
                     <div class="mb-4">
                         <mat-form-field class="w-100">
-                            <mat-select class="py-1" formControlName="originCountryId" placeholder="Original Country">
+                            <mat-select class="py-1" formControlName="originCountryId" placeholder="Original Country" required>
                                 <div class="p-2 filter">
                                     <mat-form-field appearance="outline" class="w-100">
                                         <input matInput (keyup)="search($event.target.value,'countries')" (keydown)="$event.stopPropagation()" class="w-100">
@@ -54,6 +71,14 @@
                                     </div>
                                 </mat-option>
                             </mat-select>
+                            <mat-error
+                                [ngTemplateOutlet]="formError"
+                                [ngTemplateOutletContext]="{
+                                validation: 'required',
+                                message: 'This field is required',
+                                control: itemForm.controls['originCountryId']
+                                }"
+                            ></mat-error>
                         </mat-form-field>
                     </div>
                 </div> 
@@ -76,8 +101,16 @@
                         <div class="col-6">
                             <div class="mb-4">
                                 <mat-form-field class="w-100">
-                                    <input class="py-1" type="number" matInput placeholder="Price" formControlName="unitPrice"/>
+                                    <input class="py-1" type="number" matInput placeholder="Price" formControlName="unitPrice" required/>
                                     <span matSuffix class="ml-3">SAR</span>
+                                    <mat-error
+                                        [ngTemplateOutlet]="formError"
+                                        [ngTemplateOutletContext]="{
+                                        validation: 'required',
+                                        message: 'This field is required',
+                                        control: itemForm.controls['unitPrice']
+                                        }"
+                                    ></mat-error>
                                 </mat-form-field>
                             </div>
                         </div>
@@ -277,3 +310,14 @@
         <button type="button" class="btn btn-primary" (click)="modal.dismiss('Cross click')">Done</button>
     </div>
 </ng-template>
+
+<ng-template #formError let-control="control" let-message="message" let-validation="validation">
+    <mat-error *ngIf="control.hasError(validation) && (control.dirty || control.touched)">
+      <div class="fv-plugins-message-container">
+        <div class="fv-help-block">
+          {{ message }}
+        </div>
+      </div>
+    </mat-error>
+</ng-template>
+  

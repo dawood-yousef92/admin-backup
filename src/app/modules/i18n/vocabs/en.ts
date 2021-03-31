@@ -28,6 +28,7 @@ export const locale = {
       ITEMS: 'Items',
       ITEMS_LIST: 'Items List',
       ADD_ITEM: 'Add Item',
+      ORDERS: 'Orders',
 
     },
     AUTH: {
