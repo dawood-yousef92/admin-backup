@@ -17,11 +17,8 @@ export class ProfileDataComponent implements OnInit {
   selectedImageName:string;
   changeProfileImage:File;
 
-  userData: any = {
-    email: '',
-    phoneNumber: ''
-  };
-  updatePhone: FormGroup;
+  userData: any;
+  userForm: FormGroup;
 
   constructor( private auth: AuthService,
     private fb: FormBuilder, 
@@ -30,13 +27,16 @@ export class ProfileDataComponent implements OnInit {
     private toaster: ToastrService,) { }
 
   initForm() {
-    this.updatePhone = this.fb.group({
+    this.userForm = this.fb.group({
       phone: [
-        this.userData.phoneNumber || '',
+        this.userData?.phoneNumber || '',
         Validators.compose([
           Validators.pattern("[0-9]+"),
           Validators.maxLength(11),
         ]),
+      ],
+      username: [
+        this.userData?.username || 'sss',
       ],
     });
   }
@@ -90,7 +90,7 @@ export class ProfileDataComponent implements OnInit {
 
   submit() {
     this.loderService.setIsLoading = true;
-    this.manageAccountServise.updateUserProfile({phoneNumber:this.updatePhone.controls.phone.value}).subscribe((data) => {
+    this.manageAccountServise.updateUserProfile({phoneNumber:this.userForm.controls.phone.value}).subscribe((data) => {
       this.auth.getUserByToken().subscribe(data => {
         this.auth.currentUserDetails =  data.result;
       });
