@@ -18,6 +18,7 @@ export class AddItemComponent implements OnInit {
   @ViewChild('cropModal', { static: false }) cropModal: ElementRef;
   countries:any = [];
   countriesFilter:string = '';
+  categoriesFilter:string = '';
   imageChangedEvent: any = '';
   croppedImage: any = '';
   itemImages:any = [];
@@ -28,8 +29,9 @@ export class AddItemComponent implements OnInit {
   shelfLifeTypes:any[];
   productId:string;
   product:any;
+  allCats:any;
 
-  categories:any;
+  categories:any = [];
   selectedCatName:string;
   closeResult = '';
 
@@ -103,9 +105,18 @@ export class AddItemComponent implements OnInit {
         this.product?.categoryId || ''
       ],
       isActive: [
-        this.product?.isActive || true
+        this.product?.isActive || false
       ],
     });
+  }
+
+  checkPrice() {
+    if(Number(this.itemForm && this.itemForm?.get('unitPrice').value) < Number(this.itemForm?.get('offerPrice').value)) {
+      return true;
+    }
+    else {
+      return false;
+    }
   }
 
   getCountries() {
@@ -118,9 +129,13 @@ export class AddItemComponent implements OnInit {
     if(type === 'countries') {
       this.countriesFilter = e;
     }
+    else if(type === 'categories') {
+      this.categoriesFilter = e;
+    }
   }
 
   ngOnInit(): void {
+    // this.getCategoriesByBusinessType();
     this.getCountries();
     this.initForm();
     this.getCompanyCategories();
@@ -138,18 +153,19 @@ export class AddItemComponent implements OnInit {
   getProduct() {
     this.loderService.setIsLoading = true;
     this.itemsService.getProduct(this.productId).subscribe((data) => {
-      console.log(data);
       this.product = data.result.productForEdit;
-      this.tags = this.product.tags.split(',');
-      this.product.images.map((item) => {
+      if(this.product.tags) {
+        this.tags = this.product.tags?.split(',');
+      }
+      this.product?.images?.map((item) => {
         this.itemImages.push({base64:item, file:null});
         if(item.isDefault) {
           this.product.defaultImageIndex = this.product.images.indexOf(item);
         }
       })
+      this.findNested(this.categories, this.product?.categoryId)
       this.initForm();
       this.loderService.setIsLoading = false;
-      this.findNested(this.categories, this.product?.categoryId)
     })
   }
 
@@ -186,7 +202,6 @@ export class AddItemComponent implements OnInit {
   }
 
   addCroppedImage(img) {
-    console.log(img);
     if(img.file.size > 2097152) {
       this.errorImg = true;
     }
@@ -258,17 +273,31 @@ export class AddItemComponent implements OnInit {
 
   getCompanyCategories() {
     this.selectedCatName = '';
-    this.loderService.setIsLoading = true;
-    this.itemsService.getCompanyCategories().subscribe((data) => {
-      console.log(data);
-      this.categories = data.result.categoryItem;
-      if(this.categories.length > 0 && this.itemForm.controls.categoryId.value) {
-        this.findNested(this.categories, this.itemForm.controls.categoryId.value);
-      }
-      this.loderService.setIsLoading = false;
-    },(error) => {
-      this.loderService.setIsLoading = false;
-    });
+    // if(!this.allCats){
+    //   setTimeout(() => {
+    //     this.getCompanyCategories();
+    //   },500);
+    // }
+    // else {
+      this.loderService.setIsLoading = true;
+      this.itemsService.getCompanyCategories().subscribe((data) => {
+        this.categories = data.result.categoryItem;
+        // let companyCats = data.result.categoryItem;
+        // for(let i = 0; i < this.allCats.length; i++) {
+        //   for(let ii = 0; ii < companyCats.length; ii++) {
+        //     if(this.allCats[i].id === companyCats[ii].id) {
+        //       this.categories.push(this.allCats[i]);
+        //     }
+        //   }
+        // }
+        if(this.categories.length > 0 && this.itemForm.controls.categoryId.value) {
+          this.findNested(this.categories, this.itemForm.controls.categoryId.value);
+        }
+        this.loderService.setIsLoading = false;
+      },(error) => {
+        this.loderService.setIsLoading = false;
+      });
+    // }
   }
 
   selectCat(e) {
@@ -286,6 +315,13 @@ export class AddItemComponent implements OnInit {
       if(item.categories.length > 0) {
         this.findNested(item.categories, value);
       }
+    })
+  }
+
+  getCategoriesByBusinessType() {
+    this.itemsService.getCategoriesByBusinessType(3,null).subscribe((data) => {
+      this.allCats = data.result.productsCategoryItem.concat(data.result.servicesCategoryItem);
+      this.getCompanyCategories();
     })
   }
 
@@ -308,8 +344,7 @@ export class AddItemComponent implements OnInit {
     formData.append('defaultImageIndex',this.itemForm.controls.defaultImageIndex.value);
     formData.append('categoryId',this.itemForm.controls.categoryId.value);
     formData.append('minimumOrderQuantity',this.itemForm.controls.minimumOrderQuantity.value);
-    let tags = this.tags.join(',');
-    formData.append('tags',tags);
+    formData.append('tags',this.tags?.join(','));
     if(!this.productId) {
       for(let i = 0; i < this.itemImages.length; i++) {
         formData.append("productImages", this.itemImages[i].file as File, this.itemImages[i].file['name']);
@@ -333,7 +368,7 @@ export class AddItemComponent implements OnInit {
         }
       }
       this.itemsService.updateProduct(formData).subscribe((data) => {
-        this.toaster.success(data.result.successMessage);
+        this.toaster.success(data.result);
         this.loderService.setIsLoading = false;
         this.router.navigate(['/items']);
       }, (error) => {

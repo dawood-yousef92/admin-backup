@@ -15,12 +15,39 @@
                         </mat-form-field>
                     </div>
                 </div>
-                <div class="col-md-6 mb-4">
+                <!-- <div class="col-md-6 mb-4">
                     <button type="button" class="btn btn-primary" (click)="openModal(catModal)">Select Category</button>
                     <span class="mx-2 label label-xl label-light-primary label-inline" *ngIf="itemForm.controls.categoryId.value">
                         {{selectedCatName}}
                     </span>
-                </div>
+                </div> -->
+                <div class="col-md-6">
+                    <div class="mb-4">
+                        <mat-form-field class="w-100">
+                            <mat-select class="py-1" formControlName="categoryId" placeholder="Category" required>
+                                <div class="p-2 filter">
+                                    <mat-form-field appearance="outline" class="w-100">
+                                        <input matInput (keyup)="search($event.target.value,'categories')" (keydown)="$event.stopPropagation()" class="w-100">
+                                        <mat-icon matSuffix>search</mat-icon>
+                                    </mat-form-field>
+                                </div>
+                                <mat-option *ngFor="let cat of categories" [value]="cat.id" [ngClass]="{'d-none': !cat?.name?.toLowerCase().includes(categoriesFilter?.toLowerCase())}">
+                                    <div class="d-flex align-items-center">
+                                        {{cat.name}}
+                                    </div>
+                                </mat-option>
+                            </mat-select>
+                            <mat-error
+                                [ngTemplateOutlet]="formError"
+                                [ngTemplateOutletContext]="{
+                                validation: 'required',
+                                message: 'This field is required',
+                                control: itemForm.controls['categoryId']
+                                }"
+                            ></mat-error>
+                        </mat-form-field>
+                    </div>
+                </div> 
                 <div class="col-md-6">
                     <div class="row">
                         <div class="col-md-6">
@@ -112,6 +139,11 @@
                                         }"
                                     ></mat-error>
                                 </mat-form-field>
+                                <mat-error *ngIf="checkPrice()" role="alert" class="mat-error ng-tns-c180-2 ng-star-inserted">
+                                    <div class="fv-plugins-message-container">
+                                        <div class="fv-help-block">unit price must be less than offer price</div>
+                                    </div>
+                                </mat-error>
                             </div>
                         </div>
                         <div class="col-6">
@@ -130,6 +162,7 @@
                             <div class="mb-4">
                                 <mat-form-field class="w-100">
                                     <mat-select class="py-1" placeholder="Shelf Life Types" formControlName="shelfLifeType">
+                                        <mat-option [value]="null">Select Shelf Life Types</mat-option>
                                         <mat-option *ngFor="let item of shelfLifeTypes" [value]="item.id">
                                             {{item.name}}
                                         </mat-option>
@@ -152,6 +185,7 @@
                             <div class="mb-4">
                                 <mat-form-field class="w-100">
                                     <mat-select class="py-1" placeholder="Unit Of Measurements" formControlName="unitOfMeasurementId">
+                                        <mat-option [value]="null">Select Unit Of Measurements</mat-option>
                                         <mat-option *ngFor="let item of unitOfMeasurements" [value]="item.id">
                                             {{item.name}}
                                         </mat-option>
@@ -172,6 +206,7 @@
                     <div class="mb-4">
                         <mat-form-field class="w-100">
                             <mat-select class="py-1" placeholder="Packaging Types" formControlName="packagingTypeId">
+                                <mat-option [value]="null">Select Packaging Types</mat-option>
                                 <mat-option *ngFor="let item of packagingTypes" [value]="item.id">
                                     {{item.name}}
                                 </mat-option>
@@ -223,7 +258,7 @@
                 </div>
             </div>
             <div>
-                <button type="submit" class="btn btn-primary" [disabled]="itemForm.invalid">
+                <button type="submit" class="btn btn-primary" [disabled]="itemForm.invalid || checkPrice()">
                     Save
                 </button>
             </div>

@@ -32,4 +32,7 @@ export class ItemsService {
         return this.http.put<any>('Products/UpdateProduct', formData);
     }
 
+    getCategoriesByBusinessType(businessType,level): Observable<any> {
+        return this.http.post<any>('Companies/GetCategoriesByBusinessType', {businessType:businessType,level: level});
+    }
 }
