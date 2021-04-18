@@ -7,55 +7,50 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
-import { MatTabsModule } from '@angular/material/tabs';
 import { GeneralModule } from 'src/app/_metronic/partials/layout/general/general.module';
 import { AuthGuard } from 'src/app/modules/auth/_services/auth.guard';
 import { RoleGuardService as RoleGuard } from 'src/app/modules/auth/_services/role-guard.service';
-import { ItemsComponent } from './items.component';
-import { AddItemComponent } from './components/add-item/add-item.component';
-import { ItemsListComponent } from './components/items-list/items-list.component';
-import {MatIconModule} from '@angular/material/icon';
-import { ImageCropperModule } from 'ngx-image-cropper';
-import {MatRadioModule} from '@angular/material/radio';
-import {MatExpansionModule} from '@angular/material/expansion';
+import { BranchesComponent } from './branches.component';
+import { BranchesListComponent } from './components/branches-list/branches-list.component';
+import { AddBranchComponent } from './components/add-branch/add-branch.component';
+import { MatIconModule } from '@angular/material/icon';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 
 
 @NgModule({
-  declarations: [ItemsComponent, AddItemComponent, ItemsListComponent],
+  declarations: [BranchesComponent, BranchesListComponent, AddBranchComponent],
   imports: [
     CommonModule,
     TranslationModule,
     FormsModule,
     ReactiveFormsModule,
-    ImageCropperModule,
     RouterModule.forChild([
       {
         path: '',
-        component: ItemsComponent,
+        component: BranchesComponent,
         children: [
             {
                 path: '',
-                component: ItemsListComponent,
+                component: BranchesListComponent,
                 canActivate: [RoleGuard], 
                 data: { 
-                  expectedRole: 'Products.GetProducts'
+                  expectedRole: 'Branches.GetBranches'
                 }     
             },
             {
-                path: 'add-item',
-                component: AddItemComponent,
+                path: 'add-branch',
+                component: AddBranchComponent,
                 canActivate: [RoleGuard], 
                 data: { 
-                  expectedRole: 'Products.CreateProduct'
+                  expectedRole: 'Branches.CreateBranch'
                 }
             },
             {
-                path: 'edit-item/:id',
-                component: AddItemComponent,
+                path: 'edit-branch/:id',
+                component: AddBranchComponent,
                 canActivate: [RoleGuard], 
                 data: { 
-                  expectedRole: 'Products.UpdateProduct'
+                  expectedRole: 'Branches.UpdateBranch'
                 }
             },
         ]
@@ -65,15 +60,12 @@ import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
     MatInputModule,
     MatFormFieldModule,
     MatCheckboxModule,
-    MatRadioModule,
     MatSelectModule,
-    MatTabsModule,
-    GeneralModule,
     MatIconModule,
-    MatExpansionModule,
-    NgxMatSelectSearchModule,
+    GeneralModule,
+    NgxMatSelectSearchModule
 
   ],
   exports: [RouterModule],
 })
-export class ItemssModule {}
+export class BranchessModule {}

@@ -51,7 +51,7 @@ export class AddItemComponent implements OnInit {
         this.product?.code || ''
       ],
       minimumOrderQuantity: [
-        this.product?.minimumOrderQuantity || null
+        this.product?.minimumOrderQuantity || 1
       ],
       nameEn: [
         this.product?.nameEn || '',
@@ -105,11 +105,20 @@ export class AddItemComponent implements OnInit {
         this.product?.categoryId || ''
       ],
       isActive: [
-        this.product?.isActive || false
+        this.getStatus(this.product?.isActive),
       ],
     });
   }
 
+  getStatus(status) {
+    if(status === false) {
+      return false;
+    }
+    else {
+      return true;
+    }
+  }
+  
   checkPrice() {
     if(Number(this.itemForm && this.itemForm?.get('unitPrice').value) < Number(this.itemForm?.get('offerPrice').value)) {
       return true;
@@ -352,7 +361,8 @@ export class AddItemComponent implements OnInit {
       this.itemsService.createProduct(formData).subscribe((data) => {
         this.toaster.success(data.result.successMessage);
         this.loderService.setIsLoading = false;
-        this.router.navigate(['/items']);
+        // this.router.navigate(['/items']);
+        location.reload();
       }, (error) => {
         this.loderService.setIsLoading = false;
       });
